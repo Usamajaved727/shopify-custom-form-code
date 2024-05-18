@@ -1,0 +1,146 @@
+{% if section.settings.heading_text %}
+<h2>{{ section.setting.heading_text }}</h2>
+{% endif %}
+
+{% form 'contact' %}
+
+
+      {%- if form.posted_successfully? -%}
+      <p>form posted sucessfully </p>
+      {%- elsif form.errors -%}
+    {{ form.errors | default_errors }}
+      {%- endif -%}
+  
+  
+  {% for block in section.blocks %}
+           {% if block.type == 'input' and block.settings.type == 'textarea'%} 
+                <div>
+          <label for="{{ block.settings.id }}">{{ block.settings.label }}</label>
+          <textarea 
+            name="contact[{{ block.settings.name }}]"
+            placeholder=" {{ block.settings.placeholder }}"
+            id=" {{ block.settings.id }}"
+           > {{form[block. settings.name]   }}</textarea>
+         </div>
+          {% elsif block.type == 'input' and block.settings.type == 'checkbox'%}
+              <div>
+          <input type="{{ block.settings.type}}"
+            name="contact[{{ block.settings.name }}]"
+            placeholder=" {{ block.settings.placeholder }}"
+            id=" {{ block.settings.id }}"
+            {% if form[block.settings.name] %} checked {% endif %}
+             ><label for="{{ block.settings.id }}">{{ block.settings.label }}</label>
+         </div>
+   {% elsif block.type == 'input' %}
+        <div>
+          <label for="{{ block.settings.id }}">{{ block.settings.label }}</label>
+          <input type=" {{ block.settings.type}}"
+            name="contact[{{ block.settings.name }}]"
+            placeholder=" {{ block.settings.placeholder }}"
+            id=" {{ block.settings.id }}"
+            value="{% if form[block.settings.name] %} {{ form[block. settings.name] }} {% endif %}">
+         </div>
+     {% endif %}
+     {% endfor %}
+
+
+
+  
+<div>
+  <label for="first_name">First Name</label>
+  <input type="text" name="contact[first_name]" placeholder="First Name" id="first_name" value="{% if form.first_name %}{{ form.first_name }}{% endif %}">
+</div>
+  
+  <div>
+  <label for="last_name">last Name</label>
+  <input type="text" name="contact[last_name]" placeholder="last Name" id="last_name">
+</div>
+
+  <div>
+  <label for="order_number">order Number</label>
+  <input type="text" name="contact[order_number]" placeholder="order number" id="order_number">
+</div>
+
+  <div>
+  <label for="order-type">Order Type</label>
+  <select id="order-type" name="contact[order_type]">
+    <option {% if form.order_type == 'product' %} selected {% endif %}value="Returns">Returns</option>
+    <option value="Shipping">Shipping</option>
+    <option value="Custom orde">Custom order</option>
+    <option value="Other">Other</option>
+  </select>
+ </div>
+
+  <div>
+    <input type="checkbox" name="contact[urgent]" id="urgent" {% if form.urgent %} checked{% endif %}>
+    <label for="urgent">This is an urgent issue</label>
+  </div>
+  
+  <div>
+  <label for="email">Email</label>
+  <input type="email" name="contact[email]" placeholder="usamajaved@gamil.com" id="email">
+</div>
+  <div>
+      <label for="massage">Massage</label>
+    <textarea name="contact[massage]" placeholder="tell us about yourself" id="massage"></textarea>
+  </div>
+  
+<div>
+  <button type="submit">Contact us!</button>
+</div>
+  
+{% endform %}
+
+
+
+
+{% schema %}
+  {
+  "name": "custom contact form",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading_text",
+      "label": "Heading Text"
+    }
+  ],
+     "blocks": [
+    {
+      "name": "Input",
+      "type": "input",
+      "settings": [
+        {
+          "type": "text",
+          "id": "name",
+          "label": "name"
+        },
+        {
+          "type": "text",
+          "id": "placeholder",
+          "label": "placeholder"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "label"
+        },
+        {
+          "type": "text",
+          "id": "type",
+          "label": "type"
+        },
+        {
+          "type": "text",
+          "id": "id",
+          "label": "Id"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "set form"
+    }
+  ]
+}  
+{% endschema %}
